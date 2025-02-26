@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react'
-import HomePage from '../../pages/HomePage'
 import React from 'react'
+import DashboardPage from '../../pages/Dashboard'
 
 test('renders hello world message', () => {
-    render(<HomePage />)
+    render(<DashboardPage />)
     const greetings = screen.getByText(/Hello world/i)
     expect(greetings).toBeInTheDocument()
 })
