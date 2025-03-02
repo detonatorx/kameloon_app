@@ -1,3 +1,5 @@
+@import '../../styles/_variables.sass';
+
 .dashboard {
   padding: 2rem;
 
@@ -10,38 +12,7 @@
       padding: 0.5rem;
       width: 300px;
       border: 1px solid #ddd;
-      border-radius: 4px;
-    }
-  }
-
-  .tests-table {
-    width: 100%;
-    border-collapse: collapse;
-    
-    th {
-      text-align: left;
-      padding: 1rem;
-      cursor: pointer;
-      
-      &:hover {
-        background-color: #f5f5f5;
-      }
-    }
-    
-    td {
-      padding: 1rem;
-      border-bottom: 1px solid #eee;
-    }
-    
-    tr:hover {
-      background-color: #f9f9f9;
-    }
-
-    .status {
-      &-online { color: #00ff9d; }
-      &-paused { color: #ff9900; }
-      &-stopped { color: #ff0000; }
-      &-draft { color: #666666; }
+      border-radius: $main-border-radius;
     }
   }
 
@@ -49,7 +20,7 @@
   .finalize-button,
   .reset-button {
     padding: 0.5rem 1rem;
-    border-radius: 4px;
+    border-radius: $main-border-radius;
     border: none;
     cursor: pointer;
     
@@ -78,7 +49,7 @@
       background-color: #666;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: $main-border-radius;
       cursor: pointer;
     }
   }
