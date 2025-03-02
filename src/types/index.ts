@@ -9,6 +9,7 @@ export interface Test {
   type: 'CLASSIC' | 'MVT' | 'SERVER_SIDE';
   status: 'ONLINE' | 'PAUSED' | 'STOPPED' | 'DRAFT';
   siteId: number;
+  siteUrl?: string;
 }
 
 export interface SortConfig {

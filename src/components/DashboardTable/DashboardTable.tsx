@@ -18,7 +18,7 @@ const DashboardTable: FC<DashboardTableProps> = ({ data, handleSort }) => {
             <th onClick={() => handleSort('name')}>NAME</th>
             <th onClick={() => handleSort('type')}>TYPE</th>
             <th onClick={() => handleSort('status')}>STATUS</th>
-            <th onClick={() => handleSort('siteId')}>SITE</th>
+            <th onClick={() => handleSort('siteUrl')}>SITE</th>
             <th/>
         </tr>
     </thead>
@@ -28,7 +28,7 @@ const DashboardTable: FC<DashboardTableProps> = ({ data, handleSort }) => {
                 <td>{test.name}</td>
                 <td>{test.type}</td>
                 <td className={`status status-${test.status.toLowerCase()}`}>{test.status}</td>
-                <td>{test.siteId}</td>
+                <td>{test.siteUrl}</td>
                 <td>
                     {test.status !== 'DRAFT' ? (
                         <button className="results-button" onClick={() => navigate(`/results/${test.id}`)}>

@@ -1,11 +1,10 @@
-// src/hooks/useTests.ts
 import { useState, useEffect, useMemo } from 'react';
 import axios from 'axios';
 import { Site, Test } from '../types';
 
 interface UseTestsParams {
   searchQuery: string;
-  initialSortKey: keyof Test | null;
+  initialSortKey: keyof Test | 'siteUrl' | null;
   initialSortOrder: 'asc' | 'desc' | null;
   searchStarted: boolean;
   setSearchQuery: (query: string) => void;
@@ -35,7 +34,7 @@ export const useTests = ({ searchQuery, initialSortKey, initialSortOrder, search
           }
         }
 
-        if (sortKey) {
+        if (sortKey && sortKey !== 'siteUrl') {
           params._sort = sortKey;
           params._order = sortOrder || 'asc';
         }
@@ -53,16 +52,26 @@ export const useTests = ({ searchQuery, initialSortKey, initialSortOrder, search
 
   const newTestsWithSiteUrl = useMemo(() => {
     if (sites.length && tests.length) {
-      return tests.map((test) => ({
+      const testsWithSiteUrl = tests.map((test) => ({
         ...test,
         siteUrl: sites.find((site) => site.id === test.siteId)?.url || '',
-      }))
+      }));
+
+      if (sortKey === 'siteUrl') {
+        testsWithSiteUrl.sort((a, b) => {
+          if (a.siteUrl < b.siteUrl) return sortOrder === 'asc' ? -1 : 1;
+          if (a.siteUrl > b.siteUrl) return sortOrder === 'asc' ? 1 : -1;
+          return 0;
+        });
+      }
+
+      return testsWithSiteUrl;
     }
 
-    return null
-  }, [sites, tests]);
+    return [];
+  }, [sites, tests, sortKey, sortOrder]);
 
-  const handleSort = (key: keyof Test) => {
+  const handleSort = (key: keyof Test | 'siteUrl') => {
     setSortKey((currentKey) => {
       const newDirection = currentKey === key && sortOrder === 'asc' ? 'desc' : 'asc';
       setSortOrder(newDirection);
