@@ -11,6 +11,21 @@ interface UseTestsParams {
   sites: Site[];
 }
 
+const statusOrder = {
+  ASC: ["ONLINE", "PAUSED", "STOPPED", "DRAFT"],
+  DESC: ["DRAFT", "STOPPED", "PAUSED", "ONLINE"],
+};
+
+const  sortByStatus = (data: Test[], order = "ASC") => {
+  if (!statusOrder[order]) {
+    throw new Error("Invalid order parameter. Use 'ASC' or 'DESC'.");
+  }
+  
+  return [...data].sort((a, b) => {
+    return statusOrder[order].indexOf(a.status) - statusOrder[order].indexOf(b.status);
+  });
+}
+
 export const useTests = ({ searchQuery, initialSortKey, initialSortOrder, searchStarted, setSearchQuery, sites }: UseTestsParams) => {
   const [tests, setTests] = useState<Test[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -34,7 +49,7 @@ export const useTests = ({ searchQuery, initialSortKey, initialSortOrder, search
           }
         }
 
-        if (sortKey && sortKey !== 'siteUrl') {
+        if (sortKey && sortKey !== 'siteUrl' && sortKey !== 'status') {
           params._sort = sortKey;
           params._order = sortOrder || 'asc';
         }
@@ -44,9 +59,13 @@ export const useTests = ({ searchQuery, initialSortKey, initialSortOrder, search
       } catch (err) {
         setError('Failed to fetch tests');
       } finally {
+        if (sortKey === 'status' && sortOrder) {
+          setTests(sortByStatus(tests, sortOrder.toUpperCase() as 'ASC' | 'DESC'));
+        }
         setLoading(false);
       }
-    };
+    };    
+    
     fetchTests();
   }, [searchQuery, sortKey, sortOrder, searchStarted]);
 
@@ -87,5 +106,5 @@ export const useTests = ({ searchQuery, initialSortKey, initialSortOrder, search
     }
   };
 
-  return { tests: newTestsWithSiteUrl, loading, error, handleSort, handleSearchChange };
+  return { tests: newTestsWithSiteUrl, loading, error, handleSort, handleSearchChange, sortKey, sortOrder };
 };

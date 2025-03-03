@@ -6,13 +6,12 @@ import './DashboardContainer.scss'
 import DashboardTable from '../DashboardTable/DashboardTable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
-
 export const Dashboard = () => {
     const [sites, setSites] = useState<Site[]>([])
     const [searchQuery, setSearchQuery] = useState('')
     const [searchStarted, setSearchStarted] = useState(false)
 
-    const { tests, loading, error, handleSort, handleSearchChange } = useTests({
+    const { tests, loading, error, handleSort, handleSearchChange, sortKey, sortOrder } = useTests({
         searchQuery,
         initialSortKey: null,
         initialSortOrder: null,
@@ -62,7 +61,7 @@ export const Dashboard = () => {
             {loading && <p>Loading...</p>}
             {error && <p>{error}</p>}
 
-            {!loading && !error && tests && <DashboardTable data={tests} handleSort={handleSort} />}
+            {!loading && !error && tests && <DashboardTable data={tests} handleSort={handleSort} sortKey={sortKey} sortOrder={sortOrder} />}
 
             {searchQuery && tests?.length === 0 && (
                 <div className="no-results">
