@@ -1,82 +1,19 @@
-@import '../../styles/_variables.sass';
-
-.tests-table {
+.tests-grid {
+  display: grid;
+  grid-template-columns: 40% 1fr 1fr 1fr 150px;
   width: 100%;
-
-  th {
-    text-align: left;
-    padding: 1rem;
-    cursor: pointer;
-    font-weight: 400;
-    color: #5c5c5c;
-
-    &:hover {
-      background-color: #f5f5f5;
-    }
-
-    &:first-child {
-      width: 40%;
-    }
-
-    &:last-child {
-      width: 150px;
-    }
-
-    &:last-child:hover {
-      background-color: transparent;
-      cursor: default;
-    }
-  }
-
-  td {
-    padding: 1rem;
-    border-bottom: 1px solid #eee;
-  }
-
-  tr:hover {
-    background-color: #f9f9f9;
-  }
-
-  .status {
-    &-online {
-      color: #1bda9d;
-    }
-
-    &-paused {
-      color: #ff8346;
-    }
-
-    &-stopped {
-      color: #fe4848;
-    }
-
-    &-draft {
-      color: #5c5c5c;
-    }
-  }
-
+  row-gap: 6px;
 }
 
-.results-button,
-.finalize-button {
-  min-width: 120px;
-  padding: 0.5rem 1rem;
-  border-radius: $main-border-radius;
-  border: none;
-  cursor: pointer;
-
-  &.results-button {
-    background-color: #2ee5ac;
-    color: white;
+.grid-header {
+  display: contents;
+  font-weight: bold;
+  
+  >div {
+    padding: 1rem;
   }
+}
 
-  &.finalize-button {
-    background-color: #666666;
-    color: white;
-  }
-
-  &.reset-button {
-    background-color: #989595;
-    color: black;
-  }
+.grid-body {
+  display: contents;
 }

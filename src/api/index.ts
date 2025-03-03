@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { Site, Test } from '../types';
 
-const API_BASE_URL = 'http://localhost:3100'; // adjust based on your API
+const API_BASE_URL = 'http://localhost:3100';
 
 export const api = {
   getSites: () => axios.get<Site[]>(`${API_BASE_URL}/sites`).then(res => res.data),

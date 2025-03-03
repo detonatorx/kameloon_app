@@ -1,0 +1,63 @@
+@import '../../styles/_variables.sass';
+
+.grid-row {
+  display: contents;
+
+  &>div {
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border-radius: $small-border-radius;
+
+
+    &:first-child {
+      border-left-style: solid;
+      border-left-width: 6px;
+      border-left-color: transparent;
+    }
+
+  }
+}
+
+.status {
+  &-online {
+    color: #1bda9d;
+  }
+
+  &-paused {
+    color: #ff8346;
+  }
+
+  &-stopped {
+    color: #fe4848;
+  }
+
+  &-draft {
+    color: #5c5c5c;
+  }
+}
+
+.results-button,
+.finalize-button {
+  min-width: 120px;
+  padding: 0.5rem 1rem;
+  border-radius: $main-border-radius;
+  border: none;
+  cursor: pointer;
+
+  &.results-button {
+    background-color: #2ee5ac;
+    color: white;
+  }
+
+  &.finalize-button {
+    background-color: #666666;
+    color: white;
+  }
+
+  &.reset-button {
+    background-color: #989595;
+    color: black;
+  }
+}
