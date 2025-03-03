@@ -1,14 +1,11 @@
 import { useState, useEffect, useMemo } from 'react';
-import axios from 'axios';
 import { Site, Test } from '../types';
+import { api } from '../api';
 
 interface UseTestsParams {
   searchQuery: string;
-  initialSortKey: keyof Test | 'siteUrl' | null;
-  initialSortOrder: 'asc' | 'desc' | null;
   searchStarted: boolean;
   setSearchQuery: (query: string) => void;
-  sites: Site[];
 }
 
 const statusOrder = {
@@ -26,12 +23,13 @@ const  sortByStatus = (data: Test[], order = "ASC") => {
   });
 }
 
-export const useTests = ({ searchQuery, initialSortKey, initialSortOrder, searchStarted, setSearchQuery, sites }: UseTestsParams) => {
+export const useTests = ({ searchQuery, searchStarted, setSearchQuery }: UseTestsParams) => {
+  const [sites, setSites] = useState<Site[]>([])
   const [tests, setTests] = useState<Test[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [sortKey, setSortKey] = useState<typeof initialSortKey>(initialSortKey);
-  const [sortOrder, setSortOrder] = useState<typeof initialSortOrder>(initialSortOrder);
+  const [sortKey, setSortKey] = useState<keyof Test | null>(null);
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc' | null>(null);
 
   useEffect(() => {
     const fetchTests = async () => {
@@ -40,22 +38,22 @@ export const useTests = ({ searchQuery, initialSortKey, initialSortOrder, search
 
       try {
         const params: Record<string, string> = {};
-        if (searchQuery) {
-          params.name_like = searchQuery;
-
-          if (searchStarted) {
-            setSortKey(null);
-            setSortOrder('asc'); 
+          if (searchQuery) {
+            params.name_like = searchQuery;
+  
+            if (searchStarted) {
+              setSortKey(null);
+              setSortOrder('asc'); 
+            }
           }
+  
+          if (sortKey && sortKey !== 'siteUrl' && sortKey !== 'status') {
+            params._sort = sortKey;
+            params._order = sortOrder || 'asc';
         }
 
-        if (sortKey && sortKey !== 'siteUrl' && sortKey !== 'status') {
-          params._sort = sortKey;
-          params._order = sortOrder || 'asc';
-        }
-
-        const response = await axios.get<Test[]>('http://localhost:3100/tests', { params });
-        setTests(response.data);
+        const response = await api.getTests(params);
+        setTests(response);
       } catch (err) {
         setError('Failed to fetch tests');
       } finally {
@@ -65,8 +63,17 @@ export const useTests = ({ searchQuery, initialSortKey, initialSortOrder, search
         setLoading(false);
       }
     };    
+    const fetchSites = async () => {
+        const sitesData = await api.getSites()
+        const transformedSites = sitesData.map((site: Site) => ({
+            ...site,
+            url: site.url.replace(/^(https?:\/\/)?(www\.)?/, '')
+        }))
+        setSites(transformedSites)
+    }
     
     fetchTests();
+    fetchSites()
   }, [searchQuery, sortKey, sortOrder, searchStarted]);
 
   const newTestsWithSiteUrl = useMemo(() => {
@@ -104,7 +111,7 @@ export const useTests = ({ searchQuery, initialSortKey, initialSortOrder, search
       setSortKey(null);
       setSortOrder('asc');
     }
-  };
+  }
 
   return { tests: newTestsWithSiteUrl, loading, error, handleSort, handleSearchChange, sortKey, sortOrder };
 };

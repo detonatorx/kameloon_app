@@ -4,6 +4,7 @@ import NotFoundPage from './pages/NotFoundPage'
 import { ROUTES } from './constants/routes-constants'
 import './styles/main.sass'
 import Dashboard from './pages/Dashboard'
+import TestPage from './pages/TestPage'
 
 const RootComponent: React.FC = () => {
     return (
@@ -11,8 +12,8 @@ const RootComponent: React.FC = () => {
             <Routes>
                 <Route path="*" element={<NotFoundPage />} />
                 <Route path={ROUTES.HOMEPAGE_ROUTE} element={<Dashboard />} />
-                <Route path={ROUTES.RESULTS_ROUTE} element={<h2>Results Page</h2>} />
-                <Route path={ROUTES.FINALIZE_ROUTE} element={<h2>Finalize Page</h2>} />
+                <Route path={ROUTES.RESULTS_ROUTE} element={<TestPage />} />
+                <Route path={ROUTES.FINALIZE_ROUTE} element={<TestPage />} />
             </Routes>
         </Router>
     )

@@ -1,36 +1,18 @@
 import React, { useState, useEffect } from 'react'
-import { Site } from '../../types'
-import { api } from '../../api'
 import { useTests } from '../../hooks/useTests'
 import './DashboardContainer.scss'
 import DashboardTable from '../DashboardTable/DashboardTable'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 export const Dashboard = () => {
-    const [sites, setSites] = useState<Site[]>([])
     const [searchQuery, setSearchQuery] = useState('')
     const [searchStarted, setSearchStarted] = useState(false)
 
     const { tests, loading, error, handleSort, handleSearchChange, sortKey, sortOrder } = useTests({
         searchQuery,
-        initialSortKey: null,
-        initialSortOrder: null,
         searchStarted,
         setSearchQuery,
-        sites
     })
-
-    useEffect(() => {
-        const fetchSites = async () => {
-            const sitesData = await api.getSites()
-            const transformedSites = sitesData.map((site: Site) => ({
-                ...site,
-                url: site.url.replace(/^(https?:\/\/)?(www\.)?/, '')
-            }))
-            setSites(transformedSites)
-        }
-        fetchSites()
-    }, [])
 
     const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value
